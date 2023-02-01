@@ -1,4 +1,4 @@
-package org.example.username.com.da.jpa.entite.manger;
+package org.example.username.com.da.jpa.entite.manager;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

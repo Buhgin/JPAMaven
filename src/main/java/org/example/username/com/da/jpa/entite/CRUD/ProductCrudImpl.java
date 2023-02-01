@@ -1,24 +1,23 @@
 package org.example.username.com.da.jpa.entite.CRUD;
 
-import jakarta.persistence.*;
-import org.example.username.com.da.jpa.entite.Category;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
+import org.example.username.com.da.jpa.entite.Product;
 import org.example.username.com.da.jpa.entite.manager.ThisEntity;
-
 
 import java.util.List;
 
-
-public class CategoryCrudIml implements CRUDManger<Category> {
-
+public class ProductCrudImpl implements CRUDManger<Product> {
 
     @Override
-    public void create(List<Category> category) {
-
+    public void create(List<Product> products) {
         try {
-            category.forEach((k) -> {
+
+            products.forEach((k) -> {
                 ThisEntity.getEntityManager().getTransaction().begin();
                 ThisEntity.getEntityManager().persist(k);
-                //System.out.println(k.toString());
+                //  System.out.println(k.toString());
                 ThisEntity.getEntityManager().getTransaction().commit();
 
             });
@@ -29,60 +28,64 @@ public class CategoryCrudIml implements CRUDManger<Category> {
             e.printStackTrace();
         }
 
-
     }
 
     @Override
     public void select() {
         try {
             ThisEntity.getEntityManager().getTransaction().begin();
-            TypedQuery<Category> categoryTypedQuery = ThisEntity.getEntityManager()
-                    .createQuery("SELECT c FROM Category c ", Category.class);
+            TypedQuery<Product> categoryTypedQuery = ThisEntity.getEntityManager()
+                    .createQuery("SELECT p FROM Product p ", Product.class);
 
-            List<Category> categoryList = categoryTypedQuery.getResultList();
-            categoryList.forEach(p1 -> System.out.printf("%s [%d]\n", p1.getName(), p1.getId()));
+            List<Product> categoryList = categoryTypedQuery.getResultList();
+            categoryList.forEach(p1 -> System.out.printf("PRODUCT: %s, %d, [%d],CATEGORY: %s,[%d]\n",
+                    p1.getName(), p1.getPrice(), p1.getId()
+                    ,p1.getCategory().getName()
+                    ,p1.getCategory().getId()));
             ThisEntity.getEntityManager().getTransaction().commit();
 
         } catch (Exception e) {
             ThisEntity.getEntityManager().getTransaction().rollback();
             e.printStackTrace();
         }
+
     }
 
     @Override
-    public Category slectID(Long id) {
-
-
+    public Product slectID(Long id) {
         try {
             ThisEntity.getEntityManager().getTransaction().begin();
-            TypedQuery<Category> categoryTypedQuery = ThisEntity.getEntityManager()
-                    .createQuery("SELECT c FROM Category c where c.id =" + id + "", Category.class);
-            Category p1 = categoryTypedQuery.getSingleResult();
-            System.out.printf("%s [%d]\n", p1.getName(), p1.getId());
+            TypedQuery<Product> productTypedQuery = ThisEntity.getEntityManager()
+                    .createQuery("SELECT p FROM Product p where p.id =" + id + "", Product.class);
+            Product p1 = productTypedQuery.getSingleResult();
+            System.out.printf("%s, %d, [%d]\n", p1.getName(), p1.getPrice(), p1.getId());
             ThisEntity.getEntityManager().getTransaction().commit();
             return p1;
+        }catch (NoResultException | EntityNotFoundException e) {
+            System.err.println("Id не существует");
         } catch (Exception e) {
             ThisEntity.getEntityManager().getTransaction().rollback();
             e.printStackTrace();
         }
 
         return null;
+
     }
 
-
     @Override
-    public void update(Category category) {
-
+    public void update(Product product) {
         try {
             ThisEntity.getEntityManager().getTransaction().begin();
-            ThisEntity.getEntityManager().merge(category);
+            ThisEntity.getEntityManager().merge(product);
             ThisEntity.getEntityManager().getTransaction().commit();
-            System.out.printf("Updated:[%d], %s ", category.getId(), category.getName());
+            System.out.printf("Updated:[%d], %s, %d, %s\n", product.getId(),
+                    product.getName(), product.getPrice(), product.getCategory().toString());
 
         } catch (Exception e) {
             ThisEntity.getEntityManager().getTransaction().rollback();
             e.printStackTrace();
         }
+
     }
 
     @Override
@@ -90,15 +93,14 @@ public class CategoryCrudIml implements CRUDManger<Category> {
 
         try {
             ThisEntity.getEntityManager().getTransaction().begin();
-            Category category = ThisEntity.getEntityManager().getReference(Category.class, id);
-            ThisEntity.getEntityManager().remove(category);
+            Product p = ThisEntity.getEntityManager().getReference(Product.class, id);
+            ThisEntity.getEntityManager().remove(p);
             ThisEntity.getEntityManager().getTransaction().commit();
         } catch (EntityNotFoundException e) {
             System.err.println("Id не существует");
-        }catch (Exception e) {
+        } catch (Exception e) {
             ThisEntity.getEntityManager().getTransaction().rollback();
             e.printStackTrace();
         }
     }
 }
-

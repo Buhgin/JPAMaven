@@ -5,10 +5,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 
-//@Getter
-//@Setter
-//@NoArgsConstructor
-//@ToString
+
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -61,13 +58,5 @@ public class Category {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return "Categories{" +
-                "id=" + id +
-                ", products=" + products +
-                ", options=" + options +
-                ", name='" + name + '\'' +
-                '}';
-    }
+
 }

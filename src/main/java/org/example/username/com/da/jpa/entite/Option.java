@@ -1,15 +1,11 @@
 package org.example.username.com.da.jpa.entite;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
+
 @Entity
 @Table(name = "options")
 public class Option {
@@ -18,10 +14,60 @@ public class Option {
     private Long id;
     @Column(name = "name")
     private String name;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "category_id")
     private Category category;
-    @OneToMany(mappedBy = "option",cascade = CascadeType.ALL)
-     private List<Value> value;
+    @OneToMany(mappedBy = "option", cascade = CascadeType.ALL)
+    private List<Value> value;
 
+    public Option(String name, Category category) {
+        this.name = name;
+        this.category = category;
+    }
+
+    public Option() {
+
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public List<Value> getValue() {
+        return value;
+    }
+
+    public void setValue(List<Value> value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "Option{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", category=" + category +
+                ", value=" + value +
+                '}';
+    }
 }

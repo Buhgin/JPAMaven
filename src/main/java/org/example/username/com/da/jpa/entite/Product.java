@@ -1,14 +1,10 @@
 package org.example.username.com.da.jpa.entite;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 import java.util.List;
-@Getter
-@Setter
-@NoArgsConstructor
+
 @Entity
 @Table(name="products")
 public class Product {
@@ -19,13 +15,65 @@ public class Product {
     private String name;
 
     private Integer price;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "category_id")
     private Category category;
     @OneToMany(mappedBy= "product",cascade = CascadeType.ALL)
     private List<Value> values;
 
+    public Product() {
+    }
 
+    public Product(String name, Integer price,Category category) {
+        this.name = name;
+        this.price = price;
+        this.category = category;
+    }
+
+    public Product(Long id) {
+        this.id = id;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public List<Value> getValues() {
+        return values;
+    }
+
+    public void setValues(List<Value> values) {
+        this.values = values;
+    }
 
 
 }
